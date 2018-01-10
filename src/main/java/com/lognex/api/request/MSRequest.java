@@ -4,14 +4,14 @@ import com.lognex.api.ApiClient;
 import com.lognex.api.response.ApiResponse;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.BasicHttpContext;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -46,13 +46,24 @@ public abstract class MSRequest {
     }
 
     public ApiResponse execute() {
-        try (CloseableHttpClient httpclient = buildHttpClient(client.getLogin(), client.getPassword())) {
+        try (CloseableHttpClient httpclient = buildHttpClient()) {
             HttpUriRequest request = buildRequest();
+            request.addHeader(
+                    new BasicScheme()
+                            .authenticate(
+                                    new UsernamePasswordCredentials(client.getLogin(), client.getPassword()),
+                                    request, new BasicHttpContext()
+                            )
+            );
             CloseableHttpResponse response = httpclient.execute(request);
             return ResponseParser.parse(response, this);
         } catch (IOException e) {
             log.error("Error: ", e);
             throw new RuntimeException(e);
+        } catch (AuthenticationException e) {
+            log.error("Auth error: ", e);
+            // Impossible case
+            throw  new RuntimeException(e);
         }
     }
 
@@ -76,12 +87,8 @@ public abstract class MSRequest {
         }
     }
 
-    private CloseableHttpClient buildHttpClient(String login, String password) {
-        CredentialsProvider credProvider = new BasicCredentialsProvider();
-        credProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(login, password));
-        return HttpClients.custom()
-                .setDefaultCredentialsProvider(credProvider)
-                .build();
+    private CloseableHttpClient buildHttpClient() {
+        return HttpClients.createDefault();
     }
 
     StringBuilder appendParam(final StringBuilder sb, String paramName, Object param) {
