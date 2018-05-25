@@ -1,10 +1,18 @@
 package com.lognex.api.entities;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
+/**
+ * Юридическое Лицо
+ */
 
+@Getter
+@Setter
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public final class Organization extends MetaEntity {
     public String id;
     public String accountId;
