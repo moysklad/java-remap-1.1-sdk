@@ -22,7 +22,7 @@ public class PilotTest {
     @Before
     public void init() {
         api = new LognexApi(
-                "https://online-20.moysklad.ru",
+                "online-20.moysklad.ru",
                 "admin@cddee50667affcf",
                 "1E3b81De3cb24E5a"
         );
