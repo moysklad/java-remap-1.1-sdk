@@ -142,7 +142,7 @@ public final class HttpRequestExecutor {
 
         StringBuilder queryBuilder = new StringBuilder();
         for (Map.Entry<String, Object> e : query.entrySet()) {
-            if (queryBuilder.length() == 0) queryBuilder.append("&");
+            if (queryBuilder.length() > 0) queryBuilder.append("&");
             try {
                 queryBuilder.
                         append(URLEncoder.encode(e.getKey(), queryParamsCharset.name())).

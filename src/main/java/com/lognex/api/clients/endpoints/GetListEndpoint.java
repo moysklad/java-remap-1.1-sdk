@@ -18,11 +18,17 @@ public interface GetListEndpoint<T extends MetaEntity> extends Endpoint {
                 list((Class<T>) entityClass());
     }
 
-    default ListEntity<T> get(List<String> filterExpressions, String... expand) throws IOException, LognexApiException {
+    default ListEntity<T> get(int offset, int limit, String... expand) throws IOException, LognexApiException {
+        return get(offset, limit, null, expand);
+    }
+
+    default ListEntity<T> get(int offset, int limit, List<String> filterExpressions, String... expand) throws IOException, LognexApiException {
         HttpRequestExecutor executor = HttpRequestExecutor.path(api(), path());
         if(filterExpressions != null && !filterExpressions.isEmpty()) {
-            executor.query("filter", join(filterExpressions.toArray(), "&"));
+            executor.query("filter", join(filterExpressions.toArray(), ";"));
         }
+        executor.query("offset", offset);
+        executor.query("limit", limit);
         return executor.expand(expand).list((Class<T>) entityClass());
     }
 }
