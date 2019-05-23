@@ -466,3 +466,9 @@ GET;https://test.moysklad/api/remap/1.1/entity/task/ID;String,ApiParam[];TaskEnt
 GET;https://test.moysklad/api/remap/1.1/entity/task/ENTITY_ID;MetaEntity,ApiParam[];TaskEntity
 DELETE;https://test.moysklad/api/remap/1.1/entity/task/ENTITY_ID;MetaEntity;void
 POST;https://test.moysklad/api/remap/1.1/entity/task/;MetaEntity;MetaEntity
+GET;https://test.moysklad/api/remap/1.1/entity/country/;ApiParam[];ListEntity
+GET;https://test.moysklad/api/remap/1.1/entity/country/ID;String,ApiParam[];CountryEntity
+GET;https://test.moysklad/api/remap/1.1/entity/country/ENTITY_ID;MetaEntity,ApiParam[];CountryEntity
+POST;https://test.moysklad/api/remap/1.1/entity/country/;MetaEntity;MetaEntity
+DELETE;https://test.moysklad/api/remap/1.1/entity/country/ID;String;void
+DELETE;https://test.moysklad/api/remap/1.1/entity/country/ENTITY_ID;MetaEntity;void
