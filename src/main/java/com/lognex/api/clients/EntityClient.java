@@ -112,6 +112,11 @@ public final class EntityClient {
     }
 
     @ApiChainElement
+    public CountryClient country() {
+        return new CountryClient(api);
+    }
+
+    @ApiChainElement
     public CurrencyClient currency() {
         return new CurrencyClient(api);
     }
